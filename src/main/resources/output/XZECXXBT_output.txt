@@ -1,1 +1,5 @@
-{"event":"ohlc_notify","symbol":"XZECXXBT","o":0.0,"h":0.0,"l":0.0,"c":0.0,"volume":0.0,"bar_num":2}
+{"event":"ohlc_notify","symbol":"XZECXXBT","o":0.01947,"h":0.01947,"l":0.01947,"c":0.01947,"volume":0.1,"bar_num":1}
+{"event":"ohlc_notify","symbol":"XZECXXBT","o":0.0195,"h":0.0195,"l":0.0195,"c":0.0195,"volume":0.3,"bar_num":2}
+{"event":"ohlc_notify","symbol":"XZECXXBT","o":0.01955,"h":0.01955,"l":0.01955,"c":0.01955,"volume":0.5,"bar_num":3}
+{"event":"ohlc_notify","symbol":"XZECXXBT","o":0.0,"h":0.0,"l":0.0,"c":0.0,"volume":0.0,"bar_num":4}
+{"event":"ohlc_notify","symbol":"XZECXXBT","o":0.0196,"h":0.0196,"l":0.0196,"c":0.0196,"volume":0.2,"bar_num":5}

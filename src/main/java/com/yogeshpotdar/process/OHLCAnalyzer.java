@@ -1,6 +1,7 @@
 package com.yogeshpotdar.process;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.annotations.Beta;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeMap;
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -24,9 +24,11 @@ import java.util.*;
 import java.util.concurrent.*;
 
 @Slf4j
+@SuppressWarnings({"unstable"})
 public class OHLCAnalyzer {
 
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    public static final String OHLC_NOTIFY = "ohlc_notify";
     private static BlockingQueue<String> inputRecordsQueue = new ArrayBlockingQueue<>(100);
 
     private static Map<String, List<ChartDataComparable>> symbolToChartDataKeyMap = new HashMap<>();
@@ -37,8 +39,9 @@ public class OHLCAnalyzer {
     private static boolean processingComplete = false;
 
     private static final Callable<? extends Object> outputWriter = () -> {
-        ChartDataKey chartDataKey = new ChartDataKey("XZECXXBT", Instant.ofEpochMilli(1538409725339216500L), 1);
-        subscriptionQueue.add(chartDataKey);
+        subscriptionQueue.add(new ChartDataKey("XZECXXBT", Instant.ofEpochMilli(1538409725339216500L), 1));
+        subscriptionQueue.add(new ChartDataKey("XETHZUSD", Instant.ofEpochMilli(1538409738828589280L), 1));
+
         boolean processingCompleteFull = false;
         do {
             ChartData chartData = userPublishQueue.take();
@@ -83,7 +86,7 @@ public class OHLCAnalyzer {
 
     private static ChartDataComparable createNewBar(long sequence, Instant startInstant, String symbol) {
         log.debug("createNewBar sequence={},startInstant={},symbol={}", sequence, startInstant, symbol);
-        ChartData chartData = new ChartData("ohlc_notify", symbol, sequence);
+        ChartData chartData = new ChartData(OHLC_NOTIFY, symbol, sequence);
         ChartDataComparable chartDataKey1 = new ChartDataKey(symbol, startInstant);
         ChartDataComparable chartDataKey2 = new ChartDataKey(symbol, startInstant.plusSeconds(15));
         Range<ChartDataComparable> range = Range.closedOpen(chartDataKey1, chartDataKey2);
@@ -97,7 +100,7 @@ public class OHLCAnalyzer {
 
     private static final Callable<Void> inputReaderWorker = () -> {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-        URI uri = Objects.requireNonNull(contextClassLoader.getResource("json/trades.json")).toURI();
+        URI uri = Objects.requireNonNull(contextClassLoader.getResource("json/trades_small.txt")).toURI();
         final Path path = Paths.get(uri);
 
         try (BufferedReader bufferedReader = Files.newBufferedReader(path, Charset.defaultCharset())) {
