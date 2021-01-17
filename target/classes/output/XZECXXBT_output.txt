@@ -1,0 +1,1 @@
+{"event":"ohlc_notify","symbol":"XZECXXBT","o":0.0,"h":0.0,"l":0.0,"c":0.0,"volume":0.0,"bar_num":2}
